@@ -1,58 +1,162 @@
-### One time setup for project
+# **Credit Card Fraud Detector**  
+An open-source, AI-powered fraud detection system that combines **machine learning, blockchain security, and facial recognition** to prevent fraudulent transactions.
+
+## **📌 Features**
+✔️ **AI Fraud Detection** – Uses ML models to detect suspicious transactions.  
+✔️ **Blockchain Security** – Secure transactions using smart contracts.  
+✔️ **Facial Recognition** – Prevents fraud with biometric verification.  
+✔️ **Twilio Alerts** – Sends real-time fraud alerts via SMS.  
+✔️ **Next.js Frontend** – Interactive user dashboard.  
+
+---
+
+## **⚙️ Technology Stack**
+🔹 **Backend**: FastAPI, TensorFlow, OpenCV, Dlib, Scikit-Learn  
+🔹 **AI Model**: DeepFace, Face Recognition  
+🔹 **Blockchain**: Hardhat, Solidity, Ethereum  
+🔹 **Frontend**: Next.js, React, TailwindCSS  
+🔹 **Notifications**: Twilio API  
+
+---
+
+## **🛠️ One-Time Project Setup**
+Before running the project, ensure your system meets these **prerequisites**.
+
+### **1️⃣ System Requirements (Ubuntu)**
+Run the following commands to install required dependencies:  
 ```sh
-# ubuntu system requirements and update.
+# Update system packages
 sudo apt update
-sudo apt install -y build-essential cmake libopenblas-dev liblapack-dev libx11-dev libgtk-3-dev
-sudo apt install python3.10
+
+# Install dependencies
+sudo apt install -y build-essential cmake libopenblas-dev liblapack-dev libx11-dev libgtk-3-dev python3.10
+```
+
+---
+
+### **2️⃣ AI Model Setup**
+#### **🔹 Create and Activate Virtual Environment**
+```sh
 cd ai_model
 python3.10 -m venv venv
 source venv/bin/activate
-pip install --no-cache-dir dlib  fastapi uvicorn opencv-python numpy twilio joblib pandas  fastapi  pillow uvicorn  pip setuptools wheel  tensorflow-cpu  deepface  python-multipart face_recognition  twilio python-dotenv  scikit-learn  deepface tf-keras
+```
+
+#### **🔹 Install Dependencies**
+```sh
+pip install --no-cache-dir dlib fastapi uvicorn opencv-python numpy twilio joblib pandas pillow scikit-learn python-dotenv deepface tensorflow-cpu tf-keras python-multipart
 pip install git+https://github.com/ageitgey/face_recognition_models
 pip install dlib==19.21.1
+```
+
+**Deactivate and reactivate the virtual environment:**
+```sh
 deactivate
 source venv/bin/activate
 ```
 
-### Twillo API setup
-- make fre account in https://twilio.com/, and login
-- goto https://console.twilio.com/
-- get your phone number, Account SID,and Auth Token
-- now here in project, make .env file in `ai_model` folder
-- paste your keys from twillo
+---
 
+### **3️⃣ Twilio API Setup (For Fraud Alerts)**
+- Create a **free account** on [Twilio](https://twilio.com/) and log in.  
+- Go to the [Twilio Console](https://console.twilio.com/) to get:  
+  - **Phone Number**  
+  - **Account SID**  
+  - **Auth Token**  
+- Create a `.env` file inside the `ai_model` folder and paste your Twilio credentials:
+```env
+TWILIO_ACCOUNT_SID=your_account_sid
+TWILIO_AUTH_TOKEN=your_auth_token
+TWILIO_PHONE_NUMBER=your_twilio_number
+```
 
-### Start Local blockchain
-```sh 
+---
+
+## **🚀 Running the Project**
+
+### **1️⃣ Start Local Blockchain**
+```sh
 cd blockchain_api
 npm i 
 npx hardhat node
 ```
-### Deploy smart contract and  Start blockchain api 
-```sh 
+
+---
+
+### **2️⃣ Deploy Smart Contract & Start Blockchain API**
+```sh
 cd blockchain_api
 npx hardhat run --network localhost scripts/deploy.js
 node api.js
 ```
 
+---
 
-### Train and start api server
+### **3️⃣ Train and Start AI Fraud Detection API**
 ```sh
 cd ai_model
 source venv/bin/activate
 
+# Train the AI fraud detection model
 python3 train_fraud_model.py
+
+# Start the FastAPI server
 uvicorn all_apis:app --host 0.0.0.0 --port 8000
 ```
 
-### Start NextJS Frontend
-```sh 
-cd fraud-detection-frontend 
-npm i 
+---
+
+### **4️⃣ Start Next.js Frontend**
+```sh
+cd fraud-detection-frontend
+npm i
 npm run dev
 ```
 
-### Give camera permission in Chrome to localhost:3000
-1. Open `chrome://flags/#unsafely-treat-insecure-origin-as-secure`
-2. copy paste `http://localhost:3000`
-3. Restart Chrome and try again.
+---
+
+### **5️⃣ Enable Camera Permissions in Chrome**
+To allow facial recognition in the browser, grant **camera permissions** for `localhost:3000`:
+
+1. Open Chrome and go to:  
+   ```
+   chrome://flags/#unsafely-treat-insecure-origin-as-secure
+   ```
+2. Paste this into the box:  
+   ```
+   http://localhost:3000
+   ```
+3. **Restart Chrome** and try again.
+
+---
+
+## **🛠️ Contribution Guide**
+Want to improve this project? Contributions are welcome! 🎉  
+
+### **🔹 Fork & Clone the Repository**
+```sh
+git clone https://github.com/aakash4dev/credit-card-fraud-detector.git
+cd credit-card-fraud-detector
+```
+
+### **🔹 Create a New Branch**
+```sh
+git checkout -b feature-your-feature-name
+```
+
+### **🔹 Make Changes & Commit**
+```sh
+git add .
+git commit -m "Added new feature"
+```
+
+### **🔹 Push Changes & Open a Pull Request**
+```sh
+git push origin feature-your-feature-name
+```
+Go to **GitHub** and submit a **Pull Request (PR).** 🚀
+
+---
+
+## **📜 License**
+This project is **open-source** under the **MIT License**. Feel free to use, modify, and distribute.
