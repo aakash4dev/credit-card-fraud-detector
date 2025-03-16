@@ -1,10 +1,9 @@
-### One time 
+### One time setup for project
 ```sh
 # ubuntu system requirements and update.
 sudo apt update
 sudo apt install -y build-essential cmake libopenblas-dev liblapack-dev libx11-dev libgtk-3-dev
 sudo apt install python3.10
-
 cd ai_model
 python3.10 -m venv venv
 source venv/bin/activate
@@ -13,8 +12,10 @@ pip install git+https://github.com/ageitgey/face_recognition_models
 pip install dlib==19.21.1
 deactivate
 source venv/bin/activate
+```
 
-# Python AI model: train and start api servers 
+### Train and start api server
+```sh
 cd ai_model
 source venv/bin/activate
 
@@ -27,7 +28,7 @@ uvicorn fraud_api:app --host 0.0.0.0 --port 8000
 2. copy paste `http://localhost:8000`
 3. Restart Chrome and try again.
 
-# frontend 
+### frontend 
 ```sh 
 cd fraud-detection-frontend 
 npm i 
