@@ -45,14 +45,14 @@ python3 train_fraud_model.py
 uvicorn all_apis:app --host 0.0.0.0 --port 8000
 ```
 
-### Give camera permission in Chrome to localhost:3000
-1. Open `chrome://flags/#unsafely-treat-insecure-origin-as-secure`
-2. copy paste `http://localhost:8000`
-3. Restart Chrome and try again.
-
-### frontend 
+### Start NextJS Frontend
 ```sh 
 cd fraud-detection-frontend 
 npm i 
 npm run dev
 ```
+
+### Give camera permission in Chrome to localhost:3000
+1. Open `chrome://flags/#unsafely-treat-insecure-origin-as-secure`
+2. copy paste `http://localhost:3000`
+3. Restart Chrome and try again.
