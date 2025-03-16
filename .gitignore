@@ -40,3 +40,12 @@ fraud-detection-frontend/next-env.d.ts
 
 /ai_model/venv/
 /ai_model/.env
+
+/blockchain_api/node_modules
+/blockchain_api/cache
+/blockchain_api/artifacts
+/blockchain_api/typechain
+/blockchain_api/typechain-types
+/blockchain_api/coverage
+/blockchain_api/coverage.json
+/blockchain_api/ignition/deployments/chain-31337

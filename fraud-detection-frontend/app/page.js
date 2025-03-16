@@ -20,6 +20,8 @@ export default function Home() {
         phone: "",
         otp: "",
     });
+const [txHash, setTxHash] = useState(null);
+const [transactionId, setTransactionId] = useState(null);
 
     const videoRef = useRef(null);
     const canvasRef = useRef(null);
@@ -152,28 +154,74 @@ const handleSendOtp = async () => {
         }
     };
 
-    // Handle OTP verification
-    const handleVerifyOtp = async () => {
-        if (!transaction.otp) {
-            setMessage("Please enter the OTP.");
-            return;
+const handleVerifyOtp = async () => {
+    if (!transaction.otp) {
+        setMessage("Please enter the OTP.");
+        return;
+    }
+    try {
+        const otpResponse = await axios.post(
+            "http://localhost:8000/verify_otp",
+            {
+                phone_number: transaction.phone,
+                otp: transaction.otp,
+            },
+            { headers: { "Content-Type": "application/json" } }
+        );
+
+        setMessage(otpResponse.data.status || "OTP verified successfully!");
+
+        // ✅ Debugging: Log the request data before making the API call
+        console.log("Sending Transaction Data:", {
+            card_number: transaction.card_number,
+            cvv: transaction.cvv,
+            location: transaction.location,
+            ip_address: transaction.ip_address,
+            merchant: transaction.merchant,
+            amount: parseFloat(transaction.amount),
+            transaction_type: transaction.transaction_type,
+            time_of_day: parseInt(transaction.time_of_day),
+        });
+
+        // Proceed with transaction API call
+        const transactionResponse = await fetch("http://localhost:8001/api/transactions", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json", // ✅ Add this for compatibility
+            },
+            body: JSON.stringify({
+                card_number: transaction.card_number,
+                cvv: transaction.cvv,
+                location: transaction.location,
+                ip_address: transaction.ip_address,
+                merchant: transaction.merchant,
+                amount: parseFloat(transaction.amount),
+                transaction_type: transaction.transaction_type,
+                time_of_day: parseInt(transaction.time_of_day),
+            }),
+        });
+
+        // ✅ Check if the response is successful
+        if (!transactionResponse.ok) {
+            throw new Error(`HTTP error! Status: ${transactionResponse.status}`);
         }
-        try {
-            const response = await axios.post(
-                "http://localhost:8000/verify_otp",
-                {
-                    phone_number: transaction.phone,
-                    otp: transaction.otp,
-                },
-                { headers: { "Content-Type": "application/json" } }
-            );
-            setMessage(response.data.status || "OTP verified successfully!");
-            setStep(5); // Move to transaction completed step
-        } catch (error) {
-            console.error("Error verifying OTP:", error);
-            setMessage(error.response?.data?.error || "Invalid OTP.");
+
+        const transactionData = await transactionResponse.json();
+        console.log("Transaction API Response:", transactionData); // ✅ Debug API response
+
+        if (transactionData.success) {
+            setTxHash(transactionData.tx_hash);
+            setTransactionId(transactionData.transaction_id);
+            setStep(5);
+        } else {
+            setMessage("Transaction failed. Please try again.");
         }
-    };
+    } catch (error) {
+        console.error("Error in API Call:", error);
+        setMessage(error.message || "Network error. Please check your server.");
+    }
+};
 
     // Reset transaction to start over
     const handleReset = () => {
@@ -301,18 +349,31 @@ const handleSendOtp = async () => {
                         {message && <p className={styles.message}>{message}</p>}
                     </div>
                 )}
+{step === 5 && (
+    <div className={styles.step}>
+        <h2>Transaction Completed</h2>
+        <p className={styles.successMessage}>
+            Your transaction of ${transaction.amount} to {transaction.merchant} has been successfully completed!
+        </p>
+        {txHash && (
+            <>
+                <p><strong>Transaction Hash:</strong> {txHash}</p>
+                <p>
+                    <a href={`http://localhost:8001/api/transactions/${transactionId}`}
+                       target="_blank"
+                       rel="noopener noreferrer">
+                        View Transaction Details
+                    </a>
+                </p>
+            </>
+        )}
+        <button onClick={handleReset} className={styles.button}>
+            Start New Transaction
+        </button>
+    </div>
+)}
 
-                {step === 5 && (
-                    <div className={styles.step}>
-                        <h2>Transaction Completed</h2>
-                        <p className={styles.successMessage}>
-                            Your transaction of ${transaction.amount} to {transaction.merchant} has been successfully completed!
-                        </p>
-                        <button onClick={handleReset} className={styles.button}>
-                            Start New Transaction
-                        </button>
-                    </div>
-                )}
+
             </div>
         </div>
     );

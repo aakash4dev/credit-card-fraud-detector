@@ -23,6 +23,19 @@ python3 train_fraud_model.py
 uvicorn all_apis:app --host 0.0.0.0 --port 8000
 ```
 
+### Start blockchain and Blockchain API
+```sh 
+cd blockchain_api
+npm i 
+npx hardhat node
+```
+### Start blockchain api 
+```sh 
+cd blockchain_api
+npx hardhat run --network localhost scripts/deploy.js
+node api.js
+```
+
 ### Give camera permission in Chrome to localhost:3000
 1. Open `chrome://flags/#unsafely-treat-insecure-origin-as-secure`
 2. copy paste `http://localhost:8000`
