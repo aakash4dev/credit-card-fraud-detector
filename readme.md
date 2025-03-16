@@ -14,6 +14,28 @@ deactivate
 source venv/bin/activate
 ```
 
+### Twillo API setup
+- make fre account in https://twilio.com/, and login
+- goto https://console.twilio.com/
+- get your phone number, Account SID,and Auth Token
+- now here in project, make .env file in `ai_model` folder
+- paste your keys from twillo
+
+
+### Start Local blockchain
+```sh 
+cd blockchain_api
+npm i 
+npx hardhat node
+```
+### Deploy smart contract and  Start blockchain api 
+```sh 
+cd blockchain_api
+npx hardhat run --network localhost scripts/deploy.js
+node api.js
+```
+
+
 ### Train and start api server
 ```sh
 cd ai_model
@@ -21,19 +43,6 @@ source venv/bin/activate
 
 python3 train_fraud_model.py
 uvicorn all_apis:app --host 0.0.0.0 --port 8000
-```
-
-### Start blockchain and Blockchain API
-```sh 
-cd blockchain_api
-npm i 
-npx hardhat node
-```
-### Start blockchain api 
-```sh 
-cd blockchain_api
-npx hardhat run --network localhost scripts/deploy.js
-node api.js
 ```
 
 ### Give camera permission in Chrome to localhost:3000
