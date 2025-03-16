@@ -1,3 +1,8 @@
+TODOs:
+- blockchain
+- face detection
+- real OTP verification
+
 # Python AI model: train and start api server
 ```sh
 # ubuntu system requirements and update.
@@ -25,29 +30,4 @@ uvicorn mock_otp_verification:app --reload --port 8001
 cd fraud-detection-frontend 
 npm i 
 npm run dev
-```
-```
-http://127.0.0.1:8000/predict 
-{
-    "card_number": "1234567812345678",
-    "cvv": "123",
-    "location": "New York",
-    "ip_address": "192.168.1.1",
-    "merchant": "Amazon",
-    "amount": 1200,
-    "transaction_type": "Online",
-    "time_of_day": 23
-}
-```
-
-
-# 
-```sh 
-#pip install --no-cache-dir face_recognition
-# uvicorn fraud_face_api:app --host 0.0.0.0 --port 8000
-# uvicorn fraud_face_api:app --host 0.0.0.0 --port 8000
-
-# pip install dlib
-# uvicorn fraud_api:app --host 0.0.0.0 --port 8000
-# uvicorn face_recognition_api:app --host 0.0.0.0 --port 8000
 ```
