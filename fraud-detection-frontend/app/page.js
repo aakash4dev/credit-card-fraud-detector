@@ -81,7 +81,7 @@ export default function Home() {
             const formData = new FormData();
             formData.append("image", blob, "photo.png"); // Ensure "image" matches backend
 
-            const response = await fetch("http://localhost:8002/match_face", {
+            const response = await fetch("http://localhost:8000/match_face", {
                 method: "POST",
                 body: formData,
             });
@@ -140,7 +140,7 @@ const handleSendOtp = async () => {
         }
         try {
             const response = await axios.post(
-                "http://localhost:8001/send_otp",
+                "http://localhost:8000/send_otp",
                 { phone_number: transaction.phone },
                 { headers: { "Content-Type": "application/json" } }
             );
@@ -160,7 +160,7 @@ const handleSendOtp = async () => {
         }
         try {
             const response = await axios.post(
-                "http://localhost:8001/verify_otp",
+                "http://localhost:8000/verify_otp",
                 {
                     phone_number: transaction.phone,
                     otp: transaction.otp,
