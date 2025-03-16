@@ -20,7 +20,7 @@ cd ai_model
 source venv/bin/activate
 
 python3 train_fraud_model.py
-uvicorn fraud_api:app --host 0.0.0.0 --port 8000
+uvicorn all_apis:app --host 0.0.0.0 --port 8000
 ```
 
 ### Give camera permission in Chrome to localhost:3000
