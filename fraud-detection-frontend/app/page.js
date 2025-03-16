@@ -1,10 +1,11 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useRef, useState, useEffect } from "react";
 import axios from "axios";
 import styles from "./page.module.css";
 
 export default function Home() {
+    const [isClient, setIsClient] = useState(false);
     const [step, setStep] = useState(1);
     const [message, setMessage] = useState("");
     const [transaction, setTransaction] = useState({
@@ -20,29 +21,92 @@ export default function Home() {
         otp: "",
     });
 
-    // Auto-detect IP address and time of day on mount
-    useEffect(() => {
-        const currentHour = new Date().getHours();
-        setTransaction((prev) => ({ ...prev, time_of_day: currentHour.toString() }));
+    const videoRef = useRef(null);
+    const canvasRef = useRef(null);
+    const [capturedImage, setCapturedImage] = useState(null);
 
-        axios
-            .get("https://api.ipify.org?format=json")
-            .then((response) => {
-                setTransaction((prev) => ({ ...prev, ip_address: response.data.ip }));
-            })
-            .catch((error) => {
-                console.error("Error fetching IP:", error);
-                setTransaction((prev) => ({ ...prev, ip_address: "192.168.1.1" }));
-            });
+    // Ensure component is mounted before accessing the browser APIs
+    useEffect(() => {
+        setIsClient(true);
     }, []);
 
-    // Handle input changes
+    useEffect(() => {
+        if (isClient) {
+            navigator.mediaDevices
+            .getUserMedia({ video: { facingMode: "user" } })
+            .then((stream) => {
+                if (videoRef.current) {
+                    videoRef.current.srcObject = stream;
+                }
+            })
+            .catch((err) => {
+                console.error("Error accessing webcam: ", err);
+                alert("Please allow camera access.");
+            });
+
+            // Auto-detect IP and time
+            const currentHour = new Date().getHours();
+            setTransaction((prev) => ({ ...prev, time_of_day: currentHour.toString() }));
+
+            axios
+                .get("https://api.ipify.org?format=json")
+                .then((response) => {
+                    setTransaction((prev) => ({ ...prev, ip_address: response.data.ip }));
+                })
+                .catch((error) => {
+                    console.error("Error fetching IP:", error);
+                    setTransaction((prev) => ({ ...prev, ip_address: "192.168.1.1" }));
+                });
+        }
+    }, [isClient]);
+
+        // Capture the photo from video stream
+    const capturePhoto = async () => {
+        if (!videoRef.current || !canvasRef.current) return;
+
+        const context = canvasRef.current.getContext("2d");
+        canvasRef.current.width = videoRef.current.videoWidth;
+        canvasRef.current.height = videoRef.current.videoHeight;
+        context.drawImage(videoRef.current, 0, 0, canvasRef.current.width, canvasRef.current.height);
+
+        const imageData = canvasRef.current.toDataURL("image/png");
+        setCapturedImage(imageData); // Store the captured image
+        sendToAPI(imageData);
+    };
+
+    // Send captured image to FastAPI backend
+    const sendToAPI = async (imageData) => {
+        try {
+            const blob = await fetch(imageData).then(res => res.blob());
+            const formData = new FormData();
+            formData.append("image", blob, "photo.png"); // Ensure "image" matches backend
+
+            const response = await fetch("http://localhost:8002/match_face", {
+                method: "POST",
+                body: formData,
+            });
+
+            const data = await response.json();
+            setMessage(data.message);
+
+            if (data.verified) {
+                setStep(2); // Move to next step
+            } else {
+                setMessage("Verification failed. Retrying in 3 seconds...");
+            }
+        } catch (error) {
+            console.error("Error:", error);
+            setMessage("Error verifying face.");
+        }
+    };
+
+
+    // Handle input changes for transaction
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         setTransaction((prev) => ({ ...prev, [name]: value }));
     };
 
-    // Handle fraud check API call
     const handleCheckFraud = async () => {
         try {
             const response = await axios.post(
@@ -62,15 +126,14 @@ export default function Home() {
 
             setMessage(response.data.prediction);
             if (response.data.prediction === "Legitimate Transaction") {
-                setStep(2); // Move to phone input for OTP
+                setStep(3);
             }
         } catch (error) {
-            console.error("Axios error:", error.message, error.code);
+            console.error("Axios error:", error);
             setMessage("Network Error: Could not reach the server.");
         }
     };
-
-    const handleSendOtp = async () => {
+const handleSendOtp = async () => {
         if (!transaction.phone) {
             setMessage("Please enter a phone number.");
             return;
@@ -82,7 +145,7 @@ export default function Home() {
                 { headers: { "Content-Type": "application/json" } }
             );
             setMessage(response.data.message || "OTP sent to your phone!");
-            setStep(3);
+            setStep(4);
         } catch (error) {
             console.error("Axios error:", error.message, error.code);
             setMessage(error.response?.data?.error || "Error sending OTP.");
@@ -105,7 +168,7 @@ export default function Home() {
                 { headers: { "Content-Type": "application/json" } }
             );
             setMessage(response.data.status || "OTP verified successfully!");
-            setStep(4); // Move to transaction completed step
+            setStep(5); // Move to transaction completed step
         } catch (error) {
             console.error("Error verifying OTP:", error);
             setMessage(error.response?.data?.error || "Invalid OTP.");
@@ -133,7 +196,28 @@ export default function Home() {
     return (
         <div className={styles.container}>
             <div className={styles.card}>
-                {step === 1 && (
+                {step === 1 && isClient && (
+                    <div className={styles.step}>
+                        <h2>Step 1: Face Verification</h2>
+                        <div className={styles.videoContainer}>
+                            <video ref={videoRef} autoPlay className={styles.video} />
+                            {capturedImage && (
+                                <img
+                                    src={capturedImage}
+                                    alt="Captured"
+                                    className={styles.capturedImage}
+                                />
+                            )}
+                        </div>
+                        <canvas ref={canvasRef} className={styles.hidden} />
+                        <button onClick={capturePhoto} className={styles.button}>
+                            Capture & Verify
+                        </button>
+                        {message && <p className={styles.message}>{message}</p>}
+                    </div>
+                )}
+
+                {step === 2 && (
                     <div className={styles.creditCard}>
                         <div className={styles.cardFront}>
                             <h2 className={styles.cardTitle}>Credit Card Transaction</h2>
@@ -173,19 +257,6 @@ export default function Home() {
                                 onChange={handleInputChange}
                                 className={styles.amount}
                             />
-                            <input
-                                type="text"
-                                name="merchant"
-                                placeholder="Merchant"
-                                value={transaction.merchant}
-                                onChange={handleInputChange}
-                                className={styles.merchant}
-                            />
-                            <div className={styles.autoFields}>
-                                <p>IP: {transaction.ip_address || "Detecting..."}</p>
-                                <p className={styles.blackText}>Time: {transaction.time_of_day} (24h)</p>
-                                <p className={styles.blackText}>Type: {transaction.transaction_type}</p>
-                            </div>
                             <button onClick={handleCheckFraud} className={styles.button}>
                                 Check Fraud
                             </button>
@@ -194,13 +265,13 @@ export default function Home() {
                     </div>
                 )}
 
-                {step === 2 && (
+                {step === 3 && (
                     <div className={styles.step}>
-                        <h2>Step 2: Phone Number for OTP</h2>
+                        <h2>Step 3: Phone Number for OTP</h2>
                         <input
                             type="tel"
                             name="phone"
-                            placeholder="Phone Number (e.g., +1234567890)"
+                            placeholder="Phone Number"
                             value={transaction.phone}
                             onChange={handleInputChange}
                             className={styles.input}
@@ -212,9 +283,9 @@ export default function Home() {
                     </div>
                 )}
 
-                {step === 3 && (
+                {step === 4 && (
                     <div className={styles.step}>
-                        <h2>Step 3: Verify OTP</h2>
+                        <h2>Step 4: Verify OTP</h2>
                         <input
                             type="text"
                             name="otp"
@@ -231,7 +302,7 @@ export default function Home() {
                     </div>
                 )}
 
-                {step === 4 && (
+                {step === 5 && (
                     <div className={styles.step}>
                         <h2>Transaction Completed</h2>
                         <p className={styles.successMessage}>

@@ -13,6 +13,69 @@
     padding: 20px;
 }
 
+.step {
+    background: white;
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    text-align: center;
+}
+
+.videoContainer {
+    position: relative;
+    width: 100%;
+    max-width: 320px; /* Limit container size */
+    height: 240px; /* Fixed height */
+    margin: 0 auto;
+    overflow: hidden; /* Prevent overflow */
+    border-radius: 10px;
+}
+
+.video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Ensure video fills container */
+}
+
+.capturedImage {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Ensure image fills container */
+    border-radius: 10px;
+}
+
+.hidden {
+    display: none;
+}
+
+.button {
+    background: #ffd700;
+    color: #1e90ff;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background 0.3s;
+    width: 100%;
+    margin-top: 10px;
+}
+
+.button:hover {
+    background: #ffcc00;
+}
+
+.message {
+    margin-top: 10px;
+    font-size: 1rem;
+    text-align: center;
+    color: #333;
+}
+
+/* Credit card styles (unchanged, added for completeness) */
 .creditCard {
     perspective: 1000px;
 }
@@ -49,10 +112,6 @@
     margin: 10px 0;
 }
 
-.cardNumber::placeholder {
-    color: rgba(255, 255, 255, 0.7);
-}
-
 .cardDetails {
     display: flex;
     justify-content: space-between;
@@ -69,13 +128,7 @@
     width: 48%;
 }
 
-.cvv::placeholder,
-.location::placeholder {
-    color: rgba(255, 255, 255, 0.7);
-}
-
-.amount,
-.merchant {
+.amount {
     background: rgba(255, 255, 255, 0.1);
     border: none;
     border-radius: 5px;
@@ -85,111 +138,8 @@
     margin: 10px 0;
 }
 
-.amount::placeholder,
-.merchant::placeholder {
-    color: rgba(255, 255, 255, 0.7);
-}
-
-.autoFields {
-    font-size: 0.9rem;
-    opacity: 0.8;
-    margin: 10px 0;
-}
-
-.step {
-    background: white;
-    border-radius: 15px;
-    padding: 20px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    text-align: center;
-}
-
-.input {
-    display: block;
-    width: 100%;
-    margin: 10px 0;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    box-sizing: border-box;
-}
-
-.button {
-    background: #ffd700;
-    color: #1e90ff;
-    border: none;
-    padding: 10px;
-    border-radius: 5px;
-    cursor: pointer;
-    font-weight: bold;
-    transition: background 0.3s;
-    width: 100%;
-}
-
-.button:hover {
-    background: #ffcc00;
-}
-
-.message {
-    margin-top: 10px;
-    font-size: 1rem;
-    text-align: center;
-    color: #333; /* Adjusted for step 2/3 readability */
-}
-
-.autoFields {
-    font-size: 0.9rem;
-    opacity: 0.8;
-    margin: 10px 0;
-}
-
-.blackText {
-    color: black; /* Make Time and Type text black */
-}
-
-.step {
-    background: white;
-    border-radius: 15px;
-    padding: 20px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    text-align: center;
-}
-
-.input {
-    display: block;
-    width: 100%;
-    margin: 10px 0;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    box-sizing: border-box;
-}
-
-.button {
-    background: #ffd700;
-    color: #1e90ff;
-    border: none;
-    padding: 10px;
-    border-radius: 5px;
-    cursor: pointer;
-    font-weight: bold;
-    transition: background 0.3s;
-    width: 100%;
-}
-
-.button:hover {
-    background: #ffcc00;
-}
-
-.message {
-    margin-top: 10px;
-    font-size: 1rem;
-    text-align: center;
-    color: #333;
-}
-
 .successMessage {
     margin: 20px 0;
     font-size: 1.2rem;
-    color: #28a745; /* Green for success */
+    color: #28a745;
 }
