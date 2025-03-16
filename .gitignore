@@ -1,1 +1,44 @@
 ./ai_model/venv/
+
+
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+fraud-detection-frontend/node_modules
+fraud-detection-frontend/.pnp
+fraud-detection-frontend/.pnp.*
+fraud-detection-frontend/.yarn/*
+fraud-detection-frontend/!.yarn/patches
+fraud-detection-frontend/!.yarn/plugins
+fraud-detection-frontend/!.yarn/releases
+fraud-detection-frontend/!.yarn/versions
+
+# testing
+fraud-detection-frontend/coverage
+
+# next.js
+fraud-detection-frontend/.next/
+fraud-detection-frontend/out/
+
+# production
+fraud-detection-frontend/build
+
+# misc
+fraud-detection-frontend/.DS_Store
+fraud-detection-frontend/*.pem
+
+# debug
+fraud-detection-frontend/npm-debug.log*
+fraud-detection-frontend/yarn-debug.log*
+fraud-detection-frontend/yarn-error.log*
+fraud-detection-frontend/.pnpm-debug.log*
+
+# env files (can opt-in for committing if needed)
+fraud-detection-frontend/.env*
+
+# vercel
+fraud-detection-frontend/.vercel
+
+# typescript
+fraud-detection-frontend/*.tsbuildinfo
+fraud-detection-frontend/next-env.d.ts

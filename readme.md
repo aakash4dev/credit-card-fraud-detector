@@ -9,10 +9,15 @@ sudo apt install -y python3
 cd ai_model
 python3 -m venv venv
 source venv/bin/activate
-pip install --no-cache-dir dlib face-recognition-models fastapi uvicorn opencv-python numpy face-recognition twilio joblib pandas scikit-learn
+pip install --no-cache-dir dlib face-recognition-models fastapi uvicorn opencv-python numpy face-recognition twilio joblib pandas scikit-learn fastapi uvicorn
 pip install dlib==19.21.1
 python3 train_fraud_model.py
 uvicorn fraud_api:app --host 0.0.0.0 --port 8000
+```
+### Mock sms verification 
+```sh 
+source venv/bin/activate
+uvicorn mock_otp_verification:app --reload --port 8001
 ```
 
 # frontend 
@@ -21,7 +26,7 @@ cd fraud-detection-frontend
 npm i 
 npm run dev
 ```
-
+```
 http://127.0.0.1:8000/predict 
 {
     "card_number": "1234567812345678",
@@ -33,8 +38,7 @@ http://127.0.0.1:8000/predict
     "transaction_type": "Online",
     "time_of_day": 23
 }
-
-
+```
 
 
 # 

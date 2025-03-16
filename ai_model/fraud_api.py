@@ -2,7 +2,7 @@ from fastapi import FastAPI
 import joblib
 import numpy as np
 from pydantic import BaseModel
-
+from fastapi.middleware.cors import CORSMiddleware
 # Load trained models
 model = joblib.load("fraud_model.pkl")
 scaler = joblib.load("scaler.pkl")
@@ -12,6 +12,13 @@ encoder_ip = joblib.load("encoder_ip.pkl")
 encoder_transaction_type = joblib.load("encoder_transaction_type.pkl")
 
 app = FastAPI()
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:3000"],  # Next.js default port
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 class Transaction(BaseModel):
     card_number: str
