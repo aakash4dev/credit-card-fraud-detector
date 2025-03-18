@@ -22,7 +22,7 @@ An open-source, AI-powered fraud detection system that combines **machine learni
 ## **🛠️ One-Time Project Setup**
 Before running the project, ensure your system meets these **prerequisites**.
 
-### **1️⃣ System Requirements (Ubuntu)**
+### **System Requirements (Ubuntu)**
 Run the following commands to install required dependencies:  
 ```sh
 # Update system packages
@@ -34,30 +34,40 @@ sudo apt install -y build-essential cmake libopenblas-dev liblapack-dev libx11-d
 
 ---
 
-### **2️⃣ AI Model Setup**
-#### **🔹 Create and Activate Virtual Environment**
+### **AI Model Setup**
+
 ```sh
+
 cd ai_model
 python3.10 -m venv venv
 source venv/bin/activate
-```
 
-#### **🔹 Install Dependencies**
-```sh
+#  Install Dependencies
 pip install --no-cache-dir dlib fastapi uvicorn opencv-python numpy twilio joblib pandas pillow scikit-learn python-dotenv deepface tensorflow-cpu tf-keras python-multipart
 pip install git+https://github.com/ageitgey/face_recognition_models
 pip install dlib==19.21.1
-```
 
-**Deactivate and reactivate the virtual environment:**
-```sh
+# Deactivate and reactivate the virtual environment:**
 deactivate
 source venv/bin/activate
 ```
 
+
+### **Train and Start AI Fraud Detection API**
+```sh
+cd ai_model
+source venv/bin/activate
+
+# Train the AI fraud detection model
+python3 train_fraud_model.py
+
+# Start the FastAPI server
+uvicorn all_apis:app --host 0.0.0.0 --port 8000
+```
+
 ---
 
-### **3️⃣ Twilio API Setup (For Fraud Alerts)**
+### If havn't setup Twilio API for SMS, Stop above code and restart after this setup:
 - Create a **free account** on [Twilio](https://twilio.com/) and log in.  
 - Go to the [Twilio Console](https://console.twilio.com/) to get:  
   - **Phone Number**  
@@ -72,18 +82,15 @@ TWILIO_PHONE_NUMBER=your_twilio_number
 
 ---
 
-## **🚀 Running the Project**
 
-### **1️⃣ Start Local Blockchain**
+### **Start Local Blockchain on new terminal**
 ```sh
 cd blockchain_api
 npm i 
 npx hardhat node
 ```
 
----
-
-### **2️⃣ Deploy Smart Contract & Start Blockchain API**
+### **Deploy Smart Contract & Start Blockchain API on New terminal**
 ```sh
 cd blockchain_api
 npx hardhat run --network localhost scripts/deploy.js
@@ -92,30 +99,17 @@ node api.js
 
 ---
 
-### **3️⃣ Train and Start AI Fraud Detection API**
-```sh
-cd ai_model
-source venv/bin/activate
-
-# Train the AI fraud detection model
-python3 train_fraud_model.py
-
-# Start the FastAPI server
-uvicorn all_apis:app --host 0.0.0.0 --port 8000
-```
-
 ---
 
-### **4️⃣ Start Next.js Frontend**
+### **Start Next.js Frontend in new terminal**
 ```sh
 cd fraud-detection-frontend
 npm i
 npm run dev
 ```
-
 ---
 
-### **5️⃣ Enable Camera Permissions in Chrome**
+### **Enable Camera Permissions in Chrome**
 To allow facial recognition in the browser, grant **camera permissions** for `localhost:3000`:
 
 1. Open Chrome and go to:  
@@ -128,8 +122,11 @@ To allow facial recognition in the browser, grant **camera permissions** for `lo
    ```
 3. **Restart Chrome** and try again.
 
----
+### Thats all, Now open localhost:3000 on the Chrome
 
+---
+---
+<!-- 
 ## **🛠️ Contribution Guide**
 Want to improve this project? Contributions are welcome! 🎉  
 
@@ -159,4 +156,4 @@ Go to **GitHub** and submit a **Pull Request (PR).** 🚀
 ---
 
 ## **📜 License**
-This project is **open-source** under the **MIT License**. Feel free to use, modify, and distribute.
+This project is **open-source** under the **MIT License**. Feel free to use, modify, and distribute. -->
