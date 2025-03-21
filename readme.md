@@ -50,7 +50,12 @@ pip install dlib==19.21.1
 # Deactivate and reactivate the virtual environment:**
 deactivate
 source venv/bin/activate
+sudo apt install uvicorn
 ```
+
+### Replace your image for face verification
+- goto ai_model/admins
+- replace me.jpeg with your face
 
 
 ### **Train and Start AI Fraud Detection API**
@@ -126,7 +131,7 @@ To allow facial recognition in the browser, grant **camera permissions** for `lo
 
 ---
 ---
-<!-- 
+
 ## **🛠️ Contribution Guide**
 Want to improve this project? Contributions are welcome! 🎉  
 
@@ -156,4 +161,4 @@ Go to **GitHub** and submit a **Pull Request (PR).** 🚀
 ---
 
 ## **📜 License**
-This project is **open-source** under the **MIT License**. Feel free to use, modify, and distribute. -->
+This project is **open-source** under the **MIT License**. Feel free to use, modify, and distribute.
