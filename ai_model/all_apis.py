@@ -31,7 +31,7 @@ encoder_transaction_type = joblib.load("encoder_transaction_type.pkl")
 # Load environment variables from .env file
 load_dotenv()
 # Path to the admin image
-admin_image_path = './admins/me.jpeg'
+admin_image_path = './admins/jd.jpeg'
 
 # Get Twilio credentials from .env file
 TWILIO_ACCOUNT_SID = os.getenv("TWILIO_ACCOUNT_SID")
